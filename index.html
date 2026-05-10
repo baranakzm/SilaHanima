@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sana Bir Sorum Var! ✨</title>
-    <!-- Konfeti efekti için kütüphane -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <title>Sıla Hanıma Sorum Var</title>
     <style>
         body {
             display: flex;
@@ -13,13 +11,13 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%);
+            background: linear-gradient(135deg, #6baae6 0%, #000000 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
         }
 
         .container {
-            background: white;
+            background: #d3c8d6;
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
@@ -31,13 +29,13 @@
 
         #ana-gorsel {
             width: 100%;
-            max-width: 250px;
-            border-radius: 15px;
-            margin-bottom: 20px;
+            max-width: 350px;
+            border-radius: 35px;
+            margin-bottom: 40px;
         }
 
         h1 {
-            color: #512da8;
+            color: #000000;
             font-size: 24px;
             margin-bottom: 30px;
         }
@@ -51,8 +49,8 @@
         }
 
         button {
-            padding: 12px 25px;
-            font-size: 16px;
+            padding: 25px 50px;
+            font-size: 24px;
             font-weight: bold;
             cursor: pointer;
             border: none;
@@ -63,7 +61,7 @@
         #evet {
             background-color: #000000;
             color: white;
-            box-shadow: 0 4px 15px rgba(126, 87, 194, 0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         #evet:hover {
@@ -72,31 +70,67 @@
         }
 
         #hayir {
-            background-color: #bdba09;
-            color: white;
-            position: absolute; /* Kaçması için kritik */
+            background-color: #000000;
+            color: rgb(255, 255, 255);
+            position: absolute; 
             z-index: 1000;
+        }
+
+        /* Final GIF Alanı Stili */
+        #final-gif-alani {
+            display: none;
+            text-align: center;
+        }
+
+        #final-gif {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 15px;
+        }
+
+        /* Kalp Patlaması Stili */
+        .kalp-efekti {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            animation: ucur 1.5s ease-out forwards;
+        }
+
+        @keyframes ucur {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)) scale(0.2) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Fotoğrafı buradaki linki değiştirerek güncelleyebilirsin -->
+    <div class="container" id="ana-kutu">
+        <!-- Başlangıç Görseli -->
         <img src="assd.jpg" alt="Sürpriz" id="ana-gorsel">
         
+        <!-- Soru -->
         <h1 id="soru">Sıla Hanım Kahve İçmeye Ne Dersiniz??</h1>
         
         <div class="butonlar">
             <button id="evet">Evet!</button>
             <button id="hayir">Hayır</button>
         </div>
+
+        <!-- Tıklandıktan Sonra Çıkacak GIF Alanı -->
+        <div id="final-gif-alani">
+            <!-- Buraya o süresiz oynayacak GIF'i ekle kanka -->
+            <img src="happy.gif.webp" id="final-gif" alt="Kutlama GIF">
+            <h2 style="color: #000000; margin-top: 20px;">HABERLESELİMM Mİİ O ZAMAN 🦅</h2>
+        </div>
     </div>
 
     <script>
         const hayir = document.getElementById('hayir');
         const evet = document.getElementById('evet');
-        const soruMetni = document.getElementById('soru');
+        const soru = document.getElementById('soru');
+        const anaGorsel = document.getElementById('ana-gorsel');
+        const butonlar = document.querySelector('.butonlar');
+        const finalAlani = document.getElementById('final-gif-alani');
 
         // Hayır butonunun kaçma mantığı
         hayir.addEventListener('mouseover', () => {
@@ -107,21 +141,51 @@
             hayir.style.top = `${y}px`;
         });
 
-        // Evet butonuna basınca kutlama
-        evet.addEventListener('click', () => {
-            // Konfeti patlat
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
+        // Kalp Patlatma Fonksiyonu (Yoğun ve Büyük)
+        function kalpPatlat(e) {
+            const kalpSayisi = 250; // Yoğunluk tavan
+            for (let i = 0; i < kalpSayisi; i++) {
+                const kalp = document.createElement('div');
+                kalp.className = 'kalp-efekti';
+                
+                const emojiler = ['🦅', '🦁', '🔥', '🌸', '✨'];
+                kalp.innerText = emojiler[Math.floor(Math.random() * emojiler.length)];
+                
+                // Dağılma Alanı
+                const x = (Math.random() - 0.5) * window.innerWidth * 0.7;
+                const y = (Math.random() - 0.5) * window.innerHeight * 0.7;
+                
+                // Rastgele Büyüklük (Büyük yaptık)
+                const rastgeleBoyut = Math.floor(Math.random() * 30) + 40; 
+                kalp.style.fontSize = rastgeleBoyut + 'px';
+                
+                kalp.style.setProperty('--x', `${x}px`);
+                kalp.style.setProperty('--y', `${y}px`);
+                
+                kalp.style.left = e.clientX + 'px';
+                kalp.style.top = e.clientY + 'px';
+                
+                document.body.appendChild(kalp);
+                
+                setTimeout(() => {
+                    kalp.remove();
+                }, 3000);
+            }
+        }
 
-            soruMetni.innerHTML = "Haberleselim O Za";
-            hayir.style.display = 'none'; // Hayır butonunu gizle
-            evet.style.transform = 'scale(1.2)';
-            
-            // 2 saniye sonra istersen bir yere yönlendirebilirsin
-            // setTimeout(() => { window.location.href = "whatsapp_linki"; }, 2000);
+        // Evet butonuna basınca olacaklar
+        evet.addEventListener('click', (e) => {
+            // 1. Kalpleri fırlat
+            kalpPatlat(e);
+
+            // 2. Eski elemanları temizle
+            anaGorsel.style.display = 'none';
+            soru.style.display = 'none';
+            butonlar.style.display = 'none';
+            hayir.style.display = 'none';
+
+            // 3. GIF alanını göster
+            finalAlani.style.display = 'block';
         });
     </script>
 </body>
