@@ -2,8 +2,8 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soruyorummm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Soruyoorum</title>
     <style>
         body {
             display: flex;
@@ -14,69 +14,69 @@
             background: linear-gradient(135deg, #6baae6 0%, #000000 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
+            touch-action: manipulation;
         }
 
         .container {
             background: #d3c8d6;
-            padding: 40px;
+            padding: 25px; /* Padding'i azalttık */
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             text-align: center;
-            max-width: 400px;
-            width: 90%;
+            max-width: 320px; /* Kutuyu daralttık */
+            width: 85%;
             z-index: 1;
         }
 
         #ana-gorsel {
             width: 100%;
-            max-width: 350px;
-            border-radius: 35px;
-            margin-bottom: 40px;
+            max-width: 250px; /* Fotoğrafı küçülttük */
+            border-radius: 20px;
+            margin-bottom: 20px;
+            object-fit: cover;
         }
 
         h1 {
             color: #000000;
-            font-size: 24px;
-            margin-bottom: 30px;
+            font-size: 18px; /* Fontu küçülttük */
+            margin-bottom: 20px;
+            line-height: 1.4;
         }
 
         .butonlar {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            height: 50px;
+            gap: 15px;
+            height: 45px;
             align-items: center;
         }
 
         button {
-            padding: 25px 50px;
-            font-size: 24px;
+            padding: 12px 25px; /* Butonları kibarlaştırdık */
+            font-size: 16px; /* Buton yazısını küçülttük */
             font-weight: bold;
             cursor: pointer;
             border: none;
-            border-radius: 50px;
-            transition: all 0.3s ease;
+            border-radius: 25px;
+            transition: all 0.2s ease;
         }
 
         #evet {
             background-color: #000000;
             color: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        #evet:hover {
-            transform: scale(1.1);
-            background-color: #920303;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         #hayir {
             background-color: #9e0303;
-            color: rgb(255, 255, 255);
+            color: white;
             position: absolute; 
             z-index: 1000;
+            transition: none !important;
+            touch-action: none;
+            white-space: nowrap; /* Yazı taşmasın */
         }
 
-        /* Final GIF Alanı Stili */
         #final-gif-alani {
             display: none;
             text-align: center;
@@ -84,11 +84,16 @@
 
         #final-gif {
             width: 100%;
-            max-width: 300px;
+            max-width: 200px; /* Final GIF'ini de küçülttük */
             border-radius: 15px;
         }
 
-        /* Kalp Patlaması Stili */
+        h2 {
+            font-size: 16px; /* Final mesajını küçülttük */
+            color: #000000;
+            margin-top: 15px;
+        }
+
         .kalp-efekti {
             position: fixed;
             pointer-events: none;
@@ -105,10 +110,7 @@
 <body>
 
     <div class="container" id="ana-kutu">
-        <!-- Başlangıç Görseli -->
         <img src="assd.jpg" alt="Sürpriz" id="ana-gorsel">
-        
-        <!-- Soru -->
         <h1 id="soru">Sıla Hanım Kahve İçmeye Ne Dersiniz??</h1>
         
         <div class="butonlar">
@@ -116,11 +118,9 @@
             <button id="hayir">Hayır</button>
         </div>
 
-        <!-- Tıklandıktan Sonra Çıkacak GIF Alanı -->
         <div id="final-gif-alani">
-            <!-- Buraya o süresiz oynayacak GIF'i ekle kanka -->
             <img src="happy.gif.webp" id="final-gif" alt="Kutlama GIF">
-            <h2 style="color: #000000; margin-top: 20px;">HABERLESELİMM Mİİ O ZAMAN 🦅</h2>
+            <h2 id="final-mesaj">HABERLESELİMM Mİİ O ZAMAN 🦅</h2>
         </div>
     </div>
 
@@ -132,59 +132,58 @@
         const butonlar = document.querySelector('.butonlar');
         const finalAlani = document.getElementById('final-gif-alani');
 
-        // Hayır butonunun kaçma mantığı
-        hayir.addEventListener('mouseover', () => {
-            const x = Math.random() * (window.innerWidth - hayir.clientWidth);
-            const y = Math.random() * (window.innerHeight - hayir.clientHeight);
+        function kac(e) {
+            if (e) e.preventDefault();
             
+            // Butonun ekran sınırlarından taşmasını engellemek için daha sıkı paylar
+            const maxX = window.innerWidth - hayir.offsetWidth - 20;
+            const maxY = window.innerHeight - hayir.offsetHeight - 20;
+            
+            const x = Math.max(10, Math.random() * maxX);
+            const y = Math.max(10, Math.random() * maxY);
+            
+            hayir.style.position = 'fixed';
             hayir.style.left = `${x}px`;
             hayir.style.top = `${y}px`;
-        });
+        }
 
-        // Kalp Patlatma Fonksiyonu (Yoğun ve Büyük)
+        hayir.addEventListener('mouseover', kac);
+        hayir.addEventListener('touchstart', kac, {passive: false});
+        hayir.addEventListener('click', (e) => { e.preventDefault(); kac(); });
+
         function kalpPatlat(e) {
-            const kalpSayisi = 250; // Yoğunluk tavan
+            const kalpSayisi = 80; // Kasmasın diye biraz daha azalttık ama hala bol
+            const clientX = e.clientX || (e.touches ? e.touches[0].clientX : window.innerWidth/2);
+            const clientY = e.clientY || (e.touches ? e.touches[0].clientY : window.innerHeight/2);
+
             for (let i = 0; i < kalpSayisi; i++) {
                 const kalp = document.createElement('div');
                 kalp.className = 'kalp-efekti';
-                
                 const emojiler = ['🦅', '🦁', '🔥', '🌸', '✨'];
                 kalp.innerText = emojiler[Math.floor(Math.random() * emojiler.length)];
                 
-                // Dağılma Alanı
-                const x = (Math.random() - 0.5) * window.innerWidth * 0.7;
-                const y = (Math.random() - 0.5) * window.innerHeight * 0.7;
+                const x = (Math.random() - 0.5) * window.innerWidth * 0.8;
+                const y = (Math.random() - 0.5) * window.innerHeight * 0.8;
                 
-                // Rastgele Büyüklük (Büyük yaptık)
-                const rastgeleBoyut = Math.floor(Math.random() * 30) + 40; 
+                const rastgeleBoyut = Math.floor(Math.random() * 15) + 20; 
                 kalp.style.fontSize = rastgeleBoyut + 'px';
-                
                 kalp.style.setProperty('--x', `${x}px`);
                 kalp.style.setProperty('--y', `${y}px`);
                 
-                kalp.style.left = e.clientX + 'px';
-                kalp.style.top = e.clientY + 'px';
+                kalp.style.left = clientX + 'px';
+                kalp.style.top = clientY + 'px';
                 
                 document.body.appendChild(kalp);
-                
-                setTimeout(() => {
-                    kalp.remove();
-                }, 3000);
+                setTimeout(() => { kalp.remove(); }, 1500);
             }
         }
 
-        // Evet butonuna basınca olacaklar
         evet.addEventListener('click', (e) => {
-            // 1. Kalpleri fırlat
             kalpPatlat(e);
-
-            // 2. Eski elemanları temizle
             anaGorsel.style.display = 'none';
             soru.style.display = 'none';
             butonlar.style.display = 'none';
             hayir.style.display = 'none';
-
-            // 3. GIF alanını göster
             finalAlani.style.display = 'block';
         });
     </script>
