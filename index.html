@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sana Bir Sorum Var! ✨</title>
+    <!-- Konfeti efekti için kütüphane -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            z-index: 1;
+        }
+
+        #ana-gorsel {
+            width: 100%;
+            max-width: 250px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #512da8;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .butonlar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            height: 50px;
+            align-items: center;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        #evet {
+            background-color: #000000;
+            color: white;
+            box-shadow: 0 4px 15px rgba(126, 87, 194, 0.3);
+        }
+
+        #evet:hover {
+            transform: scale(1.1);
+            background-color: #920303;
+        }
+
+        #hayir {
+            background-color: #bdba09;
+            color: white;
+            position: absolute; /* Kaçması için kritik */
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Fotoğrafı buradaki linki değiştirerek güncelleyebilirsin -->
+        <img src="assd.jpg" alt="Sürpriz" id="ana-gorsel">
+        
+        <h1 id="soru">Sıla Hanım Kahve İçmeye Ne Dersiniz??</h1>
+        
+        <div class="butonlar">
+            <button id="evet">Evet!</button>
+            <button id="hayir">Hayır</button>
+        </div>
+    </div>
+
+    <script>
+        const hayir = document.getElementById('hayir');
+        const evet = document.getElementById('evet');
+        const soruMetni = document.getElementById('soru');
+
+        // Hayır butonunun kaçma mantığı
+        hayir.addEventListener('mouseover', () => {
+            const x = Math.random() * (window.innerWidth - hayir.clientWidth);
+            const y = Math.random() * (window.innerHeight - hayir.clientHeight);
+            
+            hayir.style.left = `${x}px`;
+            hayir.style.top = `${y}px`;
+        });
+
+        // Evet butonuna basınca kutlama
+        evet.addEventListener('click', () => {
+            // Konfeti patlat
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+
+            soruMetni.innerHTML = "Haberleselim O Za";
+            hayir.style.display = 'none'; // Hayır butonunu gizle
+            evet.style.transform = 'scale(1.2)';
+            
+            // 2 saniye sonra istersen bir yere yönlendirebilirsin
+            // setTimeout(() => { window.location.href = "whatsapp_linki"; }, 2000);
+        });
+    </script>
+</body>
+</html>
